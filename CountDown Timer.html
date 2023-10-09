@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        #timer {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            font-size: 20px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+        #start {
+            background-color: #4CAF50;
+        }
+        #stop {
+            background-color: #f44336;
+        }
+        #reset {
+            background-color: #555555;
+        }
+        #inputSeconds {
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<input type="number" id="inputSeconds" placeholder="Enter seconds">
+<div id="timer"></div>
+
+<div>
+    <button id="start" onclick="start()">Start</button>
+    <button id="stop" onclick="stop()">Stop</button>
+    <button id="reset" onclick="reset()">Reset</button>
+</div>
+
+<script>
+var seconds,
+    remaining,
+    display = document.querySelector('#timer'),
+    inputSeconds = document.querySelector('#inputSeconds'),
+    stopButton = document.querySelector('#stop'),
+    timer,
+    isStopped = false;
+
+function start() {
+    if (!isStopped) {
+        seconds = parseInt(inputSeconds.value);
+        if (isNaN(seconds) || seconds < 1) {
+          alert("Invalid input. Please enter a number greater than 0.");
+          return;
+        }
+        inputSeconds.style.display = "none"; // hide the input box
+        remaining = seconds;
+    }
+    
+    isStopped = false;
+    clearInterval(timer);
+    
+    timer = setInterval(function () {
+        if (remaining < 0) {
+          clearInterval(timer);
+          display.textContent = "Time's up!";
+          alert("Time's up!");
+          return;
+        }
+        display.textContent = remaining + " seconds";
+        remaining--;
+    }, 1000);
+    
+    stopButton.textContent = "Stop";
+}
+
+function stop() {
+    if (isStopped) {
+      start();
+      stopButton.textContent = "Stop";
+      isStopped = false;
+    } else {
+      clearInterval(timer);
+      stopButton.textContent = "Resume";
+      isStopped = true;
+    }
+}
+
+function reset() {
+    clearInterval(timer);
+    seconds = parseInt(inputSeconds.value);
+    display.textContent = "Enter seconds and press Start";
+    inputSeconds.style.display = "block"; // show the input box
+}
+</script>
+
+</body>
+</html>
